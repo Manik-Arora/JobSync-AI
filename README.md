@@ -1,87 +1,114 @@
-# Welcome to React Router!
+# JobSync-AI
 
-A modern, production-ready template for building full-stack React applications using React Router.
+JobSync-AI is a resume review frontend built with TypeScript, Tailwind CSS, and Vite. The app enables users to upload a resume PDF, add a target job title and description, and receive an AI-powered resume review with ATS scoring, feedback, and improvement suggestions.
 
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/remix-run/react-router-templates/tree/main/default)
+## Key Features
 
-## Features
-
-- 🚀 Server-side rendering
-- ⚡️ Hot Module Replacement (HMR)
-- 📦 Asset bundling and optimization
-- 🔄 Data loading and mutations
-- 🔒 TypeScript by default
-- 🎉 TailwindCSS for styling
-- 📖 [React Router docs](https://reactrouter.com/)
+- Resume PDF upload with file preview
+- PDF-to-image conversion for in-app resume display
+- Job-specific resume analysis using AI feedback
+- Detailed score breakdown: ATS, content, structure, tone & style, skills
+- Secure resume storage using Puter file and key-value APIs
+- Resume review page at `/resume/:id`
 
 ## Getting Started
 
-### Installation
-
-Install the dependencies:
+### Install dependencies
 
 ```bash
 npm install
 ```
 
-### Development
-
-Start the development server with HMR:
+### Run in development
 
 ```bash
 npm run dev
 ```
 
-Your application will be available at `http://localhost:5173`.
+Open the app at:
 
-## Building for Production
+```text
+http://localhost:5173
+```
 
-Create a production build:
+### Build for production
 
 ```bash
 npm run build
 ```
 
-## Deployment
-
-### Docker Deployment
-
-To build and run using Docker:
+### Start the built app
 
 ```bash
-docker build -t my-app .
-
-# Run the container
-docker run -p 3000:3000 my-app
+npm start
 ```
 
-The containerized application can be deployed to any platform that supports Docker, including:
+## Usage
 
-- AWS ECS
-- Google Cloud Run
-- Azure Container Apps
-- Digital Ocean App Platform
-- Fly.io
-- Railway
+1. Open the app and go to the resume upload screen.
+2. Enter the company name, job title, and job description.
+3. Upload a resume PDF file.
+4. Click `Analyze Resume` to run the analysis.
+5. After processing, the app redirects to `/resume/:id` for the review details.
 
-### DIY Deployment
+## Project Structure
 
-If you're familiar with deploying Node applications, the built-in app server is production-ready.
+- `app/` – application entrypoint and route logic
+- `app/routes/` – page components for upload, resume review, auth, home, and wipe
+- `app/components/` – UI components like upload form, score cards, ATS review, and summary
+- `app/lib/` – utilities for PDF conversion, Puter integration, and helper functions
+- `app/constants/` – sample resume data and app constants
+- `types/` – global TypeScript interfaces
+- `public/` – static assets, images, icons, and example resumes
 
-Make sure to deploy the output of `npm run build`
+## Runtime Requirements
 
+This app relies on a Puter-like runtime exposing `window.puter` with:
+
+- `puter.auth` for authentication
+- `puter.fs` for file upload/read operations
+- `puter.ai` for AI feedback
+- `puter.kv` for storing resume metadata
+
+If `window.puter` is unavailable, upload and analysis behavior may not work correctly.
+
+## Scripts
+
+- `npm run dev` – start development server
+- `npm run build` – build production output
+- `npm start` – serve built app
+- `npm run typecheck` – run React Router type generation and TypeScript checks
+
+## Docker
+
+A `Dockerfile` is included in the repo. To build and run with Docker:
+
+```bash
+docker build -t jobsync-ai .
+docker run -p 3000:3000 jobsync-ai
 ```
-├── package.json
-├── package-lock.json (or pnpm-lock.yaml, or bun.lockb)
-├── build/
-│   ├── client/    # Static assets
-│   └── server/    # Server-side code
-```
 
-## Styling
+## Vercel
 
-This template comes with [Tailwind CSS](https://tailwindcss.com/) already configured for a simple default starting experience. You can use whatever CSS framework you prefer.
+A `vercel.json` file is included so Vercel can deploy the app as a static frontend.
+
+If you already imported the repo on Vercel, use these project settings:
+
+- Build Command: `npm run build`
+- Output Directory: `build/client`
+- Install Command: `npm install`
+- Framework Preset: `Other`
+
+Vercel will run the build and serve the generated client bundle. The `vercel.json` file also rewrites all routes to `index.html`, which is required for React Router.
+
+> You do not need to commit the `build/` folder. It is intentionally ignored by `.gitignore`.
+
+## Notes
+
+- Uploaded resumes are stored using the app's Puter-backed file system.
+- Resume review content is stored in key-value storage and presented on the review page.
+- The app currently uses local constants and runtime APIs for feedback and demonstration purposes.
 
 ---
 
-Built with ❤️ using React Router.
+Built for job seekers who want AI-assisted resume optimization.
